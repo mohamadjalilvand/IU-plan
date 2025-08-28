@@ -30,24 +30,22 @@ body {
     display: flex;
     align-items: center;
     gap: 40px;
-    animation: zoomFade 2s ease forwards;
+    animation: zoomFade 3.5s ease forwards; /* آرام‌تر شدن انیمیشن */
 }
-#preloader img {
-    height: 80px;
-}
+#preloader img { height: 80px; }
 @keyframes zoomFade {
     0% { opacity: 0; transform: scale(0.5); }
     50% { opacity: 1; transform: scale(1.1); }
     100% { opacity: 0; transform: scale(0.8); }
 }
 .fade-out {
-    animation: fadeOut 1s forwards;
+    animation: fadeOut 1.2s forwards;
 }
 @keyframes fadeOut {
     to { opacity: 0; visibility: hidden; }
 }
 
-/* محتوای صفحه */
+/* هدر و جدول */
 header {
     background-color: #1c2e4a;
     color: white;
@@ -58,7 +56,7 @@ header {
 }
 header img { height: 60px; }
 header span { font-size: 1.3em; font-weight: bold; }
-h1 { text-align: center; margin: 20px 0; color: #1c2e4a; animation: fadeSlide 1s ease forwards; }
+h1 { text-align: center; margin: 20px 0; color: #1c2e4a; animation: fadeSlide 1.4s ease forwards; }
 @keyframes fadeSlide {
     from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
@@ -70,7 +68,7 @@ table {
     border-collapse: collapse;
     background: white;
     box-shadow: 0 0 15px rgba(0,0,0,0.1);
-    animation: fadeSlide 1.2s ease forwards;
+    animation: fadeSlide 1.6s ease forwards;
 }
 th, td {
     padding: 12px;
@@ -118,24 +116,15 @@ footer {
             <th>شماره</th>
             <th>عنوان مراسم / همایش</th>
             <th>زمینه</th>
+            <th>تاریخ برگزاری (شمسی)</th>
         </tr>
     </thead>
     <tbody>
-        <tr><td>۱</td><td>همایش امنیت سایبری پیشرفته</td><td>فناوری اطلاعات</td></tr>
-        <tr><td>۲</td><td>کارگاه هوش مصنوعی</td><td>هوش مصنوعی</td></tr>
-        <tr><td>۳</td><td>نشست استارتاپ‌ها</td><td>کارآفرینی</td></tr>
-        <tr><td>۴</td><td>نمایشگاه پروژه‌ها</td><td>تحقیقات</td></tr>
-        <tr><td>۵</td><td>مسابقه برنامه‌نویسی</td><td>علوم کامپیوتر</td></tr>
-        <tr><td>۶</td><td>وبینار بلاکچین</td><td>فناوری مالی</td></tr>
-        <tr><td>۷</td><td>کارگاه امنیت شبکه</td><td>امنیت اطلاعات</td></tr>
-        <tr><td>۸</td><td>همایش کلان‌داده</td><td>داده‌کاوی</td></tr>
-        <tr><td>۹</td><td>کارگاه توسعه وب</td><td>طراحی وب</td></tr>
-        <tr><td>۱۰</td><td>نشست پژوهشی هوش مصنوعی</td><td>هوش مصنوعی</td></tr>
-        <tr><td>۱۱</td><td>وبینار تحلیل داده</td><td>داده‌کاوی</td></tr>
-        <tr><td>۱۲</td><td>مسابقه هکاتون</td><td>نوآوری</td></tr>
-        <tr><td>۱۳</td><td>نمایشگاه فناوری‌های نوین</td><td>تکنولوژی</td></tr>
-        <tr><td>۱۴</td><td>کارگاه پردازش تصویر</td><td>بینایی ماشین</td></tr>
-        <tr><td>۱۵</td><td>نشست تخصصی اینترنت اشیاء</td><td>شبکه</td></tr>
+        <tr><td>۱</td><td>همایش امنیت سایبری پیشرفته</td><td>فناوری اطلاعات</td><td data-date="2025-09-20"></td></tr>
+        <tr><td>۲</td><td>کارگاه هوش مصنوعی</td><td>هوش مصنوعی</td><td data-date="2025-10-27"></td></tr>
+        <tr><td>۳</td><td>نشست استارتاپ‌ها</td><td>کارآفرینی</td><td data-date="2025-11-15"></td></tr>
+        <tr><td>۴</td><td>نمایشگاه پروژه‌ها</td><td>تحقیقات</td><td data-date="2025-12-01"></td></tr>
+        <tr><td>۵</td><td>مسابقه برنامه‌نویسی</td><td>علوم کامپیوتر</td><td data-date="2025-12-15"></td></tr>
     </tbody>
 </table>
 
@@ -143,11 +132,25 @@ footer {
     کلیه حقوق این سایت متعلق به محمد جلیلوند و مرتضی غلامیان می‌باشد.
 </footer>
 
+<!-- کتابخانه تبدیل تاریخ -->
+<script src="https://cdn.jsdelivr.net/gh/jalaali/jalaali-js/dist/jalaali.min.js"></script>
 <script>
+function toJalaliString(gy, gm, gd) {
+    const { jy, jm, jd } = jalaali.toJalaali(gy, gm, gd);
+    return `${jy}/${jm.toString().padStart(2,'0')}/${jd.toString().padStart(2,'0')}`;
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll("td[data-date]").forEach(cell => {
+        const [gy, gm, gd] = cell.getAttribute("data-date").split("-").map(Number);
+        cell.textContent = toJalaliString(gy, gm, gd);
+    });
+});
+
 window.addEventListener("load", function() {
     const preloader = document.getElementById("preloader");
     preloader.classList.add("fade-out");
-    setTimeout(() => { preloader.style.display = "none"; }, 1000);
+    setTimeout(() => { preloader.style.display = "none"; }, 1200);
 });
 </script>
 
